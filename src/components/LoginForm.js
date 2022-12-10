@@ -45,14 +45,17 @@ export default function LoginForm() {
       }
     }
     if (status === "success") {
-      setToken(token);
-      setUserDetails(data);
-      if (message) {
-        toast.success(`${message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+      let result = setToken(token, data);
+      if (result) {
+        navigate("/profile");
       }
-      navigate("/profile");
+      // console.log(result);
+      // setUserDetails(data);
+      // if (message) {
+      //   toast.success(`${message}`, {
+      //     position: toast.POSITION.TOP_RIGHT,
+      //   });
+      // }
     }
   };
   return (

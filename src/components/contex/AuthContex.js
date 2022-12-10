@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext();
 
@@ -10,14 +11,22 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState();
   const [authToken, setAuthToken] = useState("");
+  const navigate = useNavigate();
 
-  const setToken = (token) => {
+  const setToken = (token, details) => {
+    setAuthToken(token);
     localStorage.setItem("x-auth-token", token);
+    return token;
+    // console.log(details);
+    // if (){
+
+    //   return authToken;
+    // } else {
+    //   return false;
+    // }
   };
 
-  const setUserDetails = (userDetails) => {
-    localStorage.setItem("user-details", JSON.stringify(userDetails));
-  };
+  const setUserDetails = (userDetails) => {};
 
   const getToken = () => {
     let token = localStorage.getItem("x-auth-token");
