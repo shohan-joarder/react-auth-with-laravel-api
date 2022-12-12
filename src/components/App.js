@@ -16,13 +16,14 @@ function App() {
           <FrontendLayout>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/" element={<PublicRoute />}>
-                <Route path="/login" element={<Login />} />
+              <Route path="/*" element={<PublicRoute />}>
+              <Route path="login" element={<Login />} />
               </Route>
+
               {/* private route start here */}
-              <Route path="/" element={<PrivateRoute />}>
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/test-context" element={<TestContext />} />
+              <Route path="/*" element={<PrivateRoute />}>
+                <Route path="profile" element={<Profile />} />
+                <Route path="test-context" element={<TestContext />} />
               </Route>
               {/* private route end here */}
             </Routes>

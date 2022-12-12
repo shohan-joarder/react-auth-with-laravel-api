@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import {useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext();
 
@@ -8,25 +9,27 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState();
-  const [authToken, setAuthToken] = useState("");
-  const navigate = useNavigate();
+  const [authToken, setAuthToken] = useState(
+    localStorage.getItem("x-auth-token")
+  );
 
-  const setToken = (token, details) => {
-    setAuthToken(token);
+  // Added new state +++++++++++++++++++++++++++++++
+  const [refresh, setRefresh] = useState(false)
+
+  // function name setToken to setStates ++++++++++++++++++++++++++
+  const setStates = (token) => {
     localStorage.setItem("x-auth-token", token);
-    return token;
-    // console.log(details);
-    // if (){
-
-    //   return authToken;
-    // } else {
-    //   return false;
-    // }
+    setAuthToken(getToken());
+    setCurrentUser(getCurrentUser());
+    setRefresh(true)
   };
 
-  const setUserDetails = (userDetails) => {};
+  const setUserDetails = (userDetails) => {
+    localStorage.setItem("user-details", JSON.stringify(userDetails));
+  };
 
   const getToken = () => {
     let token = localStorage.getItem("x-auth-token");
@@ -41,18 +44,22 @@ export function AuthProvider({ children }) {
   const logOut = () => {
     localStorage.removeItem("x-auth-token");
     localStorage.removeItem("user-details");
+    // Added +++++++++++++++++++++++++++++++
+    setAuthToken("");
+    navigate("/");
   };
 
+
+  // +++++++++++++++++++++++++++++++++++
   useEffect(() => {
-    setAuthToken(getToken());
-    setCurrentUser(getCurrentUser());
-    console.log("I am from context:" + authToken); // here data found
-    // logOut();
+    if (authToken && refresh) {
+      navigate("/profile");
+    }
   }, [authToken]);
 
   const value = {
     currentUser,
-    setToken,
+    setStates,
     setUserDetails,
     getToken,
     authToken,
